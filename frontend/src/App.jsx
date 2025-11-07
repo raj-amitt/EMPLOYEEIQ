@@ -7,6 +7,8 @@ import PrivateRoutes from './utils/PrivateRoutes'
 import RoleBaseRoutes from './utils/RoleBaseRoutes'
 import AdminSummary from './components/dashboard/AdminSummary'
 import DepartmentList from './components/department/DepartmentList'
+import AddDepartment from './components/department/AddDepartment'
+import EditDepartment from './components/department/EditDepartment'
 
 const App = () => {
   return (
@@ -23,6 +25,8 @@ const App = () => {
           }>
             <Route index element={<AdminSummary/>}></Route> {/*dynamically displaying the adminsummary component, also using index here as i want the route to be exactly the same as admin-dashboard */}
             <Route path='/admin-dashboard/departments' element={<DepartmentList/>}></Route>
+            <Route path='/admin-dashboard/add-department' element={<AddDepartment/>}></Route>
+            <Route path='/admin-dashboard/department/:id' element={<EditDepartment/>}></Route>
           </Route>
         <Route path='/employee-dashboard' element = {<EmployeeDashboard />}></Route>
 
