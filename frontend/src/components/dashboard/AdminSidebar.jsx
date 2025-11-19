@@ -16,8 +16,8 @@ const AdminSidebar = () => {
             <FaTachometerAlt/>
             <span>Dashboard</span>
         </NavLink>
-        <NavLink to='/'
-        className='flex items-center space-x-4 py-2.5 px-4 rounded'>
+        <NavLink to='/admin-dashboard/employees'
+        className={({isActive})=>`${isActive ? "bg-amber-500": " "} flex items-center space-x-4 py-2.5 px-4 rounded ml-2 mr-2`}>
             <FaUsers/>
             <span>Employee</span>
         </NavLink>
