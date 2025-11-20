@@ -15,6 +15,7 @@ app.use(express.json());
 app.use('/api/auth', authRouter); //basically adding a prefix to all routes in authRouter
 app.use('/api/department', departmentRouter);
 app.use('/api/employee', employeeRouter);
+app.use(express.static('public/uploads'));
 
 app.listen(process.env.PORT, ()=>{
     console.log(`Server started on port ${process.env.PORT}`);

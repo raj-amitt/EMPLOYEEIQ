@@ -1,42 +1,60 @@
-import React, {useState, useEffect} from 'react'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { columns, EmployeeButtons } from "../../utils/EmployeeHelper";
+import DataTable from "react-data-table-component";
+
 const List = () => {
-  const [employees, setEmployeees] = useState([])
-    const [empLoading, setEmpLoading] = useState(false)
-  
-  useEffect(()=>{
+  const [employees, setEmployees] = useState([]);
+  const [empLoading, setEmpLoading] = useState(false);
+  const [filteredEmployee, setFilteredEmployee] = useState([])
+
+  useEffect(() => {
     const fetchEmployees = async () => {
       setEmpLoading(true);
       try {
-        const response = await axios.get('http://localhost:3000/api/employee',{
-          headers:{
-            "Authorization": `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        if(response.data.success){
-          let sno =1;
-          const data = await response.data.departments.map((dep)=> (
-            {
-              _id: dep._id,
-              sno: sno++,
-              dep_name: dep.dep_name,
-              action : (<DepartmentButtons Id={dep._id} onDepartmentDelete={onDepartmentDelete}/>),
-            }
-          ));
-          setDepartments(data);
-          setFilteredDepartments(data);
+        const response = await axios.get("http://localhost:3000/api/employee", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        if (response.data.success) {
+          let sno = 1;
+          const data = await response.data.employees.map((emp) => ({
+            _id: emp._id,
+            sno: sno++,
+            dep_name: emp.department.dep_name,
+            name: emp.userId.name,
+            dob: new Date(emp.dob).toLocaleDateString(),
+            profileImage: (
+              <img
+                width={40}
+                className="rounded-full"
+                src={`http://localhost:3000/${emp.userId.profileImage}`}
+                alt=""
+              />
+            ),
+            action: <EmployeeButtons Id={emp._id} />,
+          }));
+          setEmployees(data);
+          setFilteredEmployee(data);
         }
       } catch (error) {
-        if(error.response && !error.response.data.success){
-          alert(error.response.data.error)
+        if (error.response && !error.response.data.success) {
+          alert(error.response.data.error);
         }
-      } finally{
+      } finally {
         setEmpLoading(false);
       }
-    }  
+    };
     fetchEmployees();
-  },[])
+  }, []);
+  const handleFilter = (e) =>{
+    const records = employees.filter((emp)=>(
+      emp.name.toLowerCase().includes(e.target.value.toLowerCase())
+    ))
+    setFilteredEmployee(records);
+  }
   return (
     <div className="p-5">
       <div className="text-center">
@@ -47,7 +65,7 @@ const List = () => {
           type="text"
           placeholder="Search by Employee Name"
           className="px-4 py-0.5 bg-gray-200 rounded"
-          
+          onChange={handleFilter}
         />
         <Link
           to={"/admin-dashboard/add-employee"}
@@ -56,8 +74,11 @@ const List = () => {
           Add New Employee
         </Link>
       </div>
+      <div className="mt-6">
+        <DataTable columns={columns} data={filteredEmployee} pagination />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default List
+export default List;
