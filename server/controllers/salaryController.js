@@ -1,0 +1,35 @@
+import Salary from '../models/Salary.js';
+
+const addSalary = async (req, res) => {
+  try {
+    const { employeeId, basicSalary, allowances, deductions, payDate } =
+      req.body;
+
+    // PREVENT DUPLICATE ENTRY
+    const existingSalary = await Salary.findOne({ employeeId, payDate });
+    if (existingSalary) {
+      return res.status(400).json({
+        success: false,
+        error: "Salary already added for this employee on this date"
+      });
+    }
+
+    const totalSalary =
+      parseInt(basicSalary) + parseInt(allowances) - parseInt(deductions);
+
+    const newSalary = new Salary({
+      employeeId,
+      basicSalary,
+      allowances,
+      deductions,
+      netSalary: totalSalary,
+      payDate,
+    });
+    await newSalary.save()
+    return res.status(200).json({succces:true, message:"Salary Added"})
+  } catch (error) {
+    return res.status(500).json({succces:false, error: "salary add server error"})
+  }
+};
+
+export { addSalary };
