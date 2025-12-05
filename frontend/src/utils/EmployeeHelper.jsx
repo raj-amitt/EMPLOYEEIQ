@@ -40,6 +40,7 @@ export const EmployeeButtons = ({ Id, onDepartmentDelete }) => {
       </button>
       <button
         className="px-3 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700"
+        onClick={()=> navigate(`/admin-dashboard/employees/salary/${Id}`)}
       >
         Salary
       </button>

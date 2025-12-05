@@ -1,3 +1,4 @@
+import Employee from '../models/Employee.js';
 import Salary from '../models/Salary.js';
 
 const addSalary = async (req, res) => {
@@ -26,10 +27,27 @@ const addSalary = async (req, res) => {
       payDate,
     });
     await newSalary.save()
-    return res.status(200).json({succces:true, message:"Salary Added"})
+    return res.status(200).json({success:true, message:"Salary Added"})
   } catch (error) {
-    return res.status(500).json({succces:false, error: "salary add server error"})
+    return res.status(500).json({success:false, error: "salary add server error"})
   }
 };
 
-export { addSalary };
+const getSalary = async (req, res) => {
+  try{
+    const {id} = req.params;
+    let salary;
+    salary = await Salary.find({employeeId : id}).populate('employeeId', 'employeeId');
+    if(!salary || salary.length < 1){
+      const employee = await Employee.findOne({userId: id})
+      salary = await Salary.find({employeeId: employee._id}).populate('employeeId', 'employeeId');
+    }
+    return res.status(200).json({success:true, salary})
+
+  }
+  catch (error) {
+    return res.status(500).json({success:false, error: "salary get server error"})
+  }
+}
+
+export { addSalary, getSalary };
