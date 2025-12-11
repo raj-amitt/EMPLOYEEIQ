@@ -3,12 +3,13 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 
 const View = () => {
-  const [salaries, setsalaries] = useState(null);
-  const [filteredSalaries, setFilteredSalaries] = useState(null);
+  const [salaries, setsalaries] = useState([]);
+  const [filteredSalaries, setFilteredSalaries] = useState([]);
   const { id } = useParams();
   let sno = 1;
 
   const fetchSalaries = async () => {
+        if (!id || id === "undefined") return;
     try {
       const response = await axios.get(
         `http://localhost:3000/api/salary/${id}`,
@@ -32,7 +33,7 @@ const View = () => {
 
   useEffect(() => {
     fetchSalaries();
-  }, []);
+  }, [id]);
   const filterSalaries = (q) => {
     const filteredRecords = salaries.filter((leave) =>
       leave.employeeId.toLocaleLowerCase().includes(q.toLocaleLowerCase())

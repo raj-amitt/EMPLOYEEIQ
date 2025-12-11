@@ -6,6 +6,8 @@ const View = () => {
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
   useEffect(() => {
+    console.log("Employee View param id:", id);
+    if (!id || id === "undefined") return;
     const fetchEmployee = async () => {
       try {
         const response = await axios.get(
@@ -26,7 +28,9 @@ const View = () => {
       }
     };
     fetchEmployee();
-  }, []);
+  }, [id]);
+
+
   return (
     <>{employee ? (
     <div className="max-w-3xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md">

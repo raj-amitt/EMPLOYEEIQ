@@ -46,6 +46,7 @@ export const EmployeeButtons = ({ Id, onDepartmentDelete }) => {
       </button>
       <button
         className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+        onClick={()=> navigate(`/admin-dashboard/employees/leaves/${Id}`)}
       >
         Leave
       </button>
