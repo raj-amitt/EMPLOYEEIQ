@@ -1,18 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DataTable from 'react-data-table-component';
 import { columns, DepartmentButtons } from "../../utils/DepartmentHelper";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
+
 function DepartmentList() {
   const [departments, setDepartments] = useState([])
   const [depLoading, setDepLoading] = useState(false)
   const [filteredDepartments, setFilteredDepartments] = useState([])
+  const navigate = useNavigate();
 
   const onDepartmentDelete = async(id)=>{
     const data =  departments.filter(dep => dep._id !== id)
-    setDepartments(data);
+    setFilteredDepartments(data);
+    navigate('/admin-dashboard')
   }
 
   useEffect(()=>{
